@@ -10,8 +10,8 @@ const paymentRoute=require('./Routes/paymentInfoRoute')
 require('dotenv').config()
 
 //Setup database entities
-const DB_PASS=process.env.DB_PASS
-const DB_LINK=`mongodb+srv://Yashaswa:${DB_PASS}@cluster0.rtncy.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`
+// const DB_PASS=process.env.DB_PASS
+const DB_LINK=process.env.MONGO_URI
 
 //Middleware
 app.use(CORS())

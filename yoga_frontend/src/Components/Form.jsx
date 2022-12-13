@@ -13,10 +13,10 @@ function Form() {
     const SaveData=()=>{
             //Changing startdate format to mm/dd/year
             var newStartDate="" 
-            newStartDate+=startDate[5]+startDate[6]+'/'+startDate[8]+startDate[9]+'/'+startDate.substr(0,4)
+            newStartDate+=startDate[5]+startDate[6]+'/'+startDate[8]+startDate[9]+'/'+startDate.substring(0,4)
             
             //Store the data on the database by calling the REST API
-            fetch("http://localhost:8000/user",{
+            fetch(`${process.env.API}/user`,{
             method:"post",
             headers:{
                 "Content-Type":"application/json"
@@ -80,7 +80,7 @@ function Form() {
             value={email}
             onChange={((e)=>setEmail(e.target.value))}
             />
-            <input type="date" 
+            Starting date: <input type="date" 
             placeholder="Starting date"
             value={startDate}
             onChange={((e)=>setStartDate(e.target.value))}

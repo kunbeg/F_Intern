@@ -13,40 +13,43 @@ function Payment() {
     const CompletePayment=()=>{
 
           //Store the data on database by calling the REST API
-          fetch('http://localhost:8000/payment',{
-              "method":"post",
-              headers:{
-                "Content-Type":"application/json"
+          fetch(`${process.env.API}/payment`, {
+            method: "post",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              mode: mode,
+              card: {
+                holderName: cardName,
+                expirationDate: expDate,
+                cardNo: accountNo,
+                cvvCode: IFSCCode,
               },
-              body:JSON.stringify({
-                "mode":mode,
-                "card":{
-                    "holderName":cardName,
-                    "expirationDate":expDate,
-                    "cardNo":accountNo,
-                    "cvvCode":IFSCCode
-                },
-                "upiId":upiId,
-                "email":localStorage.getItem("email")
+              upiId: upiId,
+              email: localStorage.getItem("email"),
+            }),
+          })
+            .then((response) => response.json())
+            //Response from the REST API
+            .then((responseData) => {
+              const message_id = responseData.message_id;
+              //If data is updated or stored successfully
+              if (message_id == 1 || message_id == 3) {
+                document.querySelector(".paymentContainer").style.display =
+                  "none";
+                document.querySelector(".completionContainer").style.display =
+                  "flex";
+              }
+              //Else create mock up box for any other response
+              else {
+                const message = responseData.message;
+                window.alert(message);
+              }
             })
-          }).then((response)=>response.json())
-          //Response from the REST API
-          .then((responseData)=>{
-               const message_id=responseData.message_id
-               //If data is updated or stored successfully
-               if(message_id==1||message_id==3){
-                document.querySelector(".paymentContainer").style.display="none"
-                document.querySelector(".completionContainer").style.display="flex"
-               }
-               //Else create mock up box for any other response
-               else{
-                   const message=responseData.message
-                   window.alert(message)
-               }
-          })
-          .catch((err)=>{
-            console.log(`Error in accessing the server is ${err}`)
-          })
+            .catch((err) => {
+              console.log(`Error in accessing the server is ${err}`);
+            });
     }
     return (
         <div className="paymentContainer">
